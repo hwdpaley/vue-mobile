@@ -71,35 +71,31 @@ export default {
   data() {
     return {
       id: this.$route.params.id, // 将路由参数对象中的 id 挂载到 data , 方便后期调用
-      lunbotu: [], // 轮播图的数据
-      goodsinfo: {}, // 获取到的商品的信息
+      // lunbotu: [], // 轮播图的数据
+      // goodsinfo: {}, // 获取到的商品的信息
       ballFlag: false, // 控制小球的隐藏和显示的标识符
       selectedCount: 1 // 保存用户选中的商品数量， 默认，认为用户买1个
     };
   },
-  created() {
+  computed: {
+    goodsinfo() {
+      return this.$store.getters.goodsinfo;
+    },
+    lunbotu() {
+      return this.$store.getters.goodslunbotus;
+    }
+  },
+  mounted() {
     this.getLunbotu();
     this.getGoodsInfo();
   },
   methods: {
     getLunbotu() {
-      this.$http.get("api/getthumimages/" + this.id).then(result => {
-        if (result.body.status === 0) {
-          // 先循环轮播图数组的每一项，为 item 添加 img 属性，因为 轮播图 组件中，只认识 item.img， 不认识 item.src
-          result.body.message.forEach(item => {
-            item.img = item.src;
-          });
-          this.lunbotu = result.body.message;
-        }
-      });
+      this.$store.commit("getGoodsLunbotus", this.id);
     },
     getGoodsInfo() {
       // 获取商品的信息
-      this.$http.get("api/goods/getinfo/" + this.id).then(result => {
-        if (result.body.status === 0) {
-          this.goodsinfo = result.body.message[0];
-        }
-      });
+      this.$store.commit("getGoodsInfo", this.id);
     },
     goDesc(id) {
       // 点击使用编程式导航跳转到 图文介绍页面

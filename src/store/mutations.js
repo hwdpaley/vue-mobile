@@ -162,5 +162,92 @@ export default {
         Toast("获取新闻失败！");
       }
     });
+  },
+  getGoodsList(state, pageindex) {
+    // 获取商品列表
+    HTTP
+      .get("api/getgoods?pageindex=" + pageindex)
+      .then(result => {
+        if (result.data.status === 0) {
+          // this.goodslist = result.data.message;
+          if (state.goodslist.length > 0) {
+            result.data.message.forEach(item => {
+              let b = false;
+              state.goodslist.forEach(item1 => {
+                if (item.id === item1.id) {
+                  b = true;
+                }
+              });
+              if (!b) {
+                state.goodslist.push(item);
+              }
+            })
+          } else {
+            state.goodslist = result.data.message;
+          }
+          // state.goodslist = state.goodslist.concat(result.data.message);
+        }
+      });
+  },
+  getGoodsInfo(state, id) {
+    // 获取商品的信息
+    HTTP
+      .get("api/goods/getinfo/" + id).then(result => {
+        if (result.data.status === 0) {
+          state.goodsinfo = result.data.message[0];
+        }
+      });
+  },
+  getGoodsLunbotus(state, id) {
+    HTTP.get("api/getthumimages/" + id).then(result => {
+      if (result.data.status === 0) {
+        // 先循环轮播图数组的每一项，为 item 添加 img 属性，因为 轮播图 组件中，只认识 item.img， 不认识 item.src
+        result.data.message.forEach(item => {
+          item.img = item.src;
+        });
+        state.goodslunbotus = result.data.message;
+      }
+    });
+  },
+  getGoodsDesc(state, id) {
+    HTTP
+      .get("api/goods/getdesc/" + id)
+      .then(result => {
+        if (result.data.status === 0) {
+          state.goodsdesc = result.data.message[0];
+        }
+      });
+  },
+  getComments(state, payload) {
+    // 获取评论
+    HTTP
+      .get("api/getcomments/" + payload.id + "?pageindex=" + payload.pageIndex)
+      .then(result => {
+        if (result.data.status === 0) {
+          // this.comments = result.data.message;
+          // 每当获取新评论数据的时候，不要把老数据清空覆盖，而是应该以老数据，拼接上新数据
+          state.comments = state.comments.concat(result.data.message);
+        } else {
+          Toast("获取评论失败！");
+        }
+      });
+  },
+  postComment(state, payload) {
+    HTTP
+      .post("api/postcomment/" + payload.id, {
+        content: payload.msg.trim()
+      })
+      .then(function (result) {
+        if (result.data.status === 0) {
+          // 1. 拼接出一个评论对象
+          var cmt = {
+            user_name: "匿名用户",
+            add_time: Date.now(),
+            content: payload.msg.trim()
+          };
+          state.comments.unshift(cmt);
+          // state.msg = "";
+        }
+      });
   }
 }

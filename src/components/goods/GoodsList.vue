@@ -44,24 +44,22 @@ export default {
   data() {
     // data 是往自己组件内部，挂载一些私有数据的
     return {
-      pageindex: 1, // 分页的页数
-      goodslist: [] // 存放商品列表的数组
+      pageindex: 1 // 分页的页数
+      // goodslist: [] // 存放商品列表的数组
     };
   },
-  created() {
+  computed: {
+    goodslist() {
+      return this.$store.getters.goodslist;
+    }
+  },
+  mounted() {
     this.getGoodsList();
   },
   methods: {
     getGoodsList() {
       // 获取商品列表
-      this.$http
-        .get("api/getgoods?pageindex=" + this.pageindex)
-        .then(result => {
-          if (result.body.status === 0) {
-            // this.goodslist = result.body.message;
-            this.goodslist = this.goodslist.concat(result.body.message);
-          }
-        });
+      this.$store.commit("getGoodsList", this.pageindex);
     },
     getMore() {
       this.pageindex++;

@@ -57,5 +57,20 @@ export default {
   },
   newsinfo(state) {
     return state.newsinfo;
+  },
+  goodslist(state) {
+    return state.goodslist;
+  },
+  goodslunbotus(state) {
+    return state.goodslunbotus;
+  },
+  goodsinfo(state) {
+    return state.goodsinfo;
+  },
+  goodsdesc(state) {
+    return state.goodsdesc;
+  },
+  comments(state) {
+    return state.comments;
   }
 }
