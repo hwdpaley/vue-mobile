@@ -1,5 +1,4 @@
 // import Vue from 'vue'
-import { HTTP } from './axios';
 import { Toast } from "mint-ui";
 export default {
   setLunbotu(state, lunbotuList) {
@@ -68,8 +67,8 @@ export default {
   getLunbotu(state) {
     // 获取轮播图数据的方法
     // const Http = new Vue
-    HTTP.get("api/getlunbo").then(result => {
-      // console.log(result.data);
+    this.$http.get("api/getlunbo").then(result => {
+      console.log('getlunbo', result.data);
       if (result.data.status === 0) {
         // 成功了
         state.lunbotuList = result.data.message
@@ -89,8 +88,10 @@ export default {
     }
     // 获取购物车商品列表
     // const Http = new Vue
-    HTTP.get("api/goods/getshopcarlist/" + idArr.join(","))
+    this.$http.get("api/goods/getshopcarlist/" + idArr.join(","))
       .then(result => {
+        console.log('result', result);
+
         if (result.data.status === 0) {
           state.shopcars = result.data.message;
         }
@@ -98,7 +99,7 @@ export default {
   },
   getAllCategory(state) {
     // 获取所有的图片分类
-    HTTP.get("api/getimgcategory").then(result => {
+    this.$http.get("api/getimgcategory").then(result => {
       // console.log(result.data);
       if (result.data.status === 0) {
         // 手动拼接出一个最完整的 分类列表
@@ -109,7 +110,7 @@ export default {
   },
   getPhotoListByCateId(state, cateId) {
     // 根据 分类Id，获取图片列表
-    HTTP.get("api/getimages/" + cateId).then(result => {
+    this.$http.get("api/getimages/" + cateId).then(result => {
 
       if (result.data.status === 0) {
         state.photoList = result.data.message;
@@ -119,7 +120,7 @@ export default {
   },
   getPhotoInfo(state, id) {
     // 获取图片的详情
-    HTTP.get("api/getimageInfo/" + id).then(result => {
+    this.$http.get("api/getimageInfo/" + id).then(result => {
       if (result.data.status === 0) {
         state.photoinfo = result.data.message[0];
       }
@@ -127,7 +128,7 @@ export default {
   },
   getThumbs(state, id) {
     // 获取缩略图
-    HTTP.get("api/getthumimages/" + id).then(result => {
+    this.$http.get("api/getthumimages/" + id).then(result => {
       if (result.data.status === 0) {
         // 循环每个图片数据，补全图片的宽和高
         result.data.message.forEach(item => {
@@ -144,7 +145,7 @@ export default {
   getNewsList(state) {
     // 获取新闻列表
     // Toast("获取新闻列表失败！");
-    HTTP.get("api/getnewslist").then(result => {
+    this.$http.get("api/getnewslist").then(result => {
       if (result.data.status === 0) {
         // 如果没有失败，应该把数据保存到 data 上
         state.newslist = result.data.message;
@@ -155,7 +156,7 @@ export default {
   },
   getNewsInfo(state, id) {
     // 获取新闻详情
-    HTTP.get("api/getnew/" + id).then(result => {
+    this.$http.get("api/getnew/" + id).then(result => {
       if (result.data.status === 0) {
         state.newsinfo = result.data.message[0];
       } else {
@@ -165,7 +166,7 @@ export default {
   },
   getGoodsList(state, pageindex) {
     // 获取商品列表
-    HTTP
+    this.$http
       .get("api/getgoods?pageindex=" + pageindex)
       .then(result => {
         if (result.data.status === 0) {
@@ -191,7 +192,7 @@ export default {
   },
   getGoodsInfo(state, id) {
     // 获取商品的信息
-    HTTP
+    this.$http
       .get("api/goods/getinfo/" + id).then(result => {
         if (result.data.status === 0) {
           state.goodsinfo = result.data.message[0];
@@ -199,7 +200,7 @@ export default {
       });
   },
   getGoodsLunbotus(state, id) {
-    HTTP.get("api/getthumimages/" + id).then(result => {
+    this.$http.get("api/getthumimages/" + id).then(result => {
       if (result.data.status === 0) {
         // 先循环轮播图数组的每一项，为 item 添加 img 属性，因为 轮播图 组件中，只认识 item.img， 不认识 item.src
         result.data.message.forEach(item => {
@@ -210,7 +211,7 @@ export default {
     });
   },
   getGoodsDesc(state, id) {
-    HTTP
+    this.$http
       .get("api/goods/getdesc/" + id)
       .then(result => {
         if (result.data.status === 0) {
@@ -220,7 +221,7 @@ export default {
   },
   getComments(state, payload) {
     // 获取评论
-    HTTP
+    this.$http
       .get("api/getcomments/" + payload.id + "?pageindex=" + payload.pageIndex)
       .then(result => {
         if (result.data.status === 0) {
@@ -233,7 +234,7 @@ export default {
       });
   },
   postComment(state, payload) {
-    HTTP
+    this.$http
       .post("api/postcomment/" + payload.id, {
         content: payload.msg.trim()
       })

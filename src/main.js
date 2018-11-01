@@ -12,8 +12,9 @@ Vue.use(VueRouter)
 // 每次刚进入 网站，肯定会 调用 main.js 在刚调用的时候，先从本地存储中，把 购物车的数据读出来，放到 store 中
 // var car = JSON.parse(localStorage.getItem('car') || '[]')
 
-import store from './store/store'
+import store from './store'
 
+import './http';
 
 
 // 导入格式化时间的插件
@@ -57,7 +58,7 @@ Vue.use(VuePreview)
 
 
 // 1.3 导入自己的 router.js 路由模块
-import router from './router.js'
+import router from './router'
 
 
 // 导入 App 根组件

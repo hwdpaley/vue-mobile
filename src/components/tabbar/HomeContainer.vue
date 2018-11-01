@@ -36,7 +36,7 @@
 <script>
 import { Toast } from "mint-ui";
 import swiper from "../subcomponents/swiper.vue";
-// import { mapGetters } from "Vuex";
+import { mapState, mapGetters } from "Vuex";
 
 export default {
   data() {
@@ -46,9 +46,10 @@ export default {
     this.getLunbotu();
   },
   computed: {
-    lunbotus() {
-      return this.$store.getters.getLunBoTu;
-    }
+    ...mapGetters(["lunbotus"])
+    // lunbotus() {
+    //   return this.$store.getters.lunbotus;
+    // }
   },
   methods: {
     getLunbotu() {

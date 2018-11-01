@@ -33,7 +33,7 @@ export default {
     })
     return o
   },
-  getLunBoTu(state) {
+  lunbotus(state) {
     return state.lunbotuList;
   },
   getShopCars(state) {
